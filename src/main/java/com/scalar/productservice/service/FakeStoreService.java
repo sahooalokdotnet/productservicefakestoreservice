@@ -1,6 +1,7 @@
 package com.scalar.productservice.service;
 
 import com.scalar.productservice.dto.FakeStoreResponseDTO;
+import com.scalar.productservice.dto.ProductResponseDTO;
 import com.scalar.productservice.model.Constants;
 import com.scalar.productservice.model.Product;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
@@ -32,12 +34,12 @@ public class FakeStoreService implements ProductService {
 
     @Override
     public List<Product> getProducts() {
-      ResponseEntity<List<FakeStoreResponseDTO>> list = restTemplate.getForObject(Constants.baseUrl, List.class);
-       List<Product> products = new ArrayList<>();
-       for (FakeStoreResponseDTO fakeStoreResponseDTO : list.getBody()) {
-           products.add(fakeStoreResponseDTO.getProduct());
+      FakeStoreResponseDTO[] products = restTemplate.getForObject(Constants.baseUrl, FakeStoreResponseDTO[].class);
+       List<Product> productList = new ArrayList<>();
+       for (FakeStoreResponseDTO fakeStoreResponseDTO : products) {
+           productList.add(fakeStoreResponseDTO.getProduct());
        }
-       return products;
+       return productList;
     }
 
     @Override
@@ -53,7 +55,8 @@ public class FakeStoreService implements ProductService {
     }
 
     @Override
-    public HttpStatus deleteProduct(Integer id) {
+    public Product deleteProduct(Integer id) {
+        restTemplate.delete(Constants.baseUrl + id, FakeStoreResponseDTO.class);
         return null;
     }
 

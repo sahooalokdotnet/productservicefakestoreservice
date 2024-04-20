@@ -55,17 +55,9 @@ public class ProductController {
     @DeleteMapping("/products/{id}")
     public String deleteProductById(@PathVariable Integer id)
     {
-        HttpStatus product = productService.deleteProduct(id);
-        if(product == HttpStatus.OK)
-        {
-            return "Product deleted successfully";
-        }
+       productService.deleteProduct(id);
         return "Product could not be deleted";
     }
-
-
-
-
 
 
     private ProductResponseDTO  getProductResponseFromProduct(Product product)

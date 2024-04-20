@@ -10,6 +10,6 @@ public interface ProductService {
     List<Product> getProducts();
     Product addProduct(String title, Double price,
                        String description, String image);
-    HttpStatus deleteProduct(Integer id);
+    Product deleteProduct(Integer id);
     Product updateProduct(Integer id, Product product);
 }
