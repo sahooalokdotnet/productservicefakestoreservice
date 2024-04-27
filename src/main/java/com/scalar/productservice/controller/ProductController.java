@@ -1,12 +1,15 @@
 package com.scalar.productservice.controller;
 
+import com.scalar.productservice.dto.CategoryResponseDTO;
 import com.scalar.productservice.dto.ProductRequestDTO;
 import com.scalar.productservice.dto.ProductResponseDTO;
+import com.scalar.productservice.exception.CategoryNotFoundException;
+import com.scalar.productservice.exception.ProductNotFoundException;
+import com.scalar.productservice.model.Category;
 import com.scalar.productservice.model.Product;
 import com.scalar.productservice.service.ProductService;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +17,7 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
 
@@ -31,17 +34,19 @@ public class ProductController {
         return productResponseDTOs;
     }
     @GetMapping("/products/{id}")
-    public ProductResponseDTO getProductById(@PathVariable Integer id)
-    {
+    public ProductResponseDTO getProductById(@PathVariable Integer id) throws ProductNotFoundException {
         Product product = this.productService.getProduct(id);
+        if(product == null)
+        {
+            throw new ProductNotFoundException("Some error occurred");
+        }
         return getProductResponseFromProduct(product);
     }
 
-
     @PostMapping("/products")
-    public ProductResponseDTO postProduct(@RequestBody ProductRequestDTO dto)
+    public ProductResponseDTO postProduct(@RequestBody ProductRequestDTO dto) throws CategoryNotFoundException
     {
-        Product product = productService.addProduct(dto.getTitle(),dto.getPrice(),dto.getDescription(), dto.getImage());
+        Product product = productService.addProduct(dto.getTitle(),dto.getPrice().toString(),dto.getDescription(), dto.getImage(), dto.getCategory());
         return getProductResponseFromProduct(product);
     }
 
@@ -62,6 +67,7 @@ public class ProductController {
 
     private ProductResponseDTO  getProductResponseFromProduct(Product product)
     {
+
         ProductResponseDTO productResponseDTO = new ProductResponseDTO();
         productResponseDTO.setId(product.getId());
         productResponseDTO.setPrice(product.getPrice());
@@ -70,4 +76,6 @@ public class ProductController {
         productResponseDTO.setTitle(product.getTitle());
         return productResponseDTO;
     }
+
+
 }
