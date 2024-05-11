@@ -1,11 +1,10 @@
 package com.scalar.productservice.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @Getter
 @Setter
@@ -16,6 +15,6 @@ public class Product extends BaseModel {
     private String price;
     private String imageUrl;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE})
     private Category category;
 }
