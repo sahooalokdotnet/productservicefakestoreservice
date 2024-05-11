@@ -22,6 +22,16 @@ public class FakeStoreService implements ProductService {
          this.restTemplate = restTemplate;
      }
 
+//    @Override
+//    public List<Product> getAllProducts(Integer pageNumber, Integer pageSize) {
+//        return List.of();
+//    }
+
+    @Override
+    public List<Product> getAllProducts(Integer pageNumber, Integer pageSize) {
+        return List.of();
+    }
+
     @Override
     public Product getProduct(Integer id) {
        ResponseEntity<FakeStoreResponseDTO> response =

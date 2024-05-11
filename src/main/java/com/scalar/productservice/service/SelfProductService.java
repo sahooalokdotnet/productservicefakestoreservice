@@ -4,14 +4,16 @@ import com.scalar.productservice.exception.CategoryNotFoundException;
 import com.scalar.productservice.exception.ProductNotFoundException;
 import com.scalar.productservice.model.Category;
 import com.scalar.productservice.model.Product;
-
 import com.scalar.productservice.repository.CategoryRepository;
 import com.scalar.productservice.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-    @Service("selfProductService")
+@Service("selfProductService")
     public class SelfProductService implements ProductService {
 
     private final ProductRepository productRepository;
@@ -22,7 +24,14 @@ import java.util.List;
         this.categoryRepository = categoryRepository;
     }
 
-    @Override
+        @Override
+        public List<Product> getAllProducts(Integer pageNumber, Integer pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize);
+            Page<Product> page = productRepository.findAll(pageable);
+            return page.getContent();
+        }
+
+        @Override
     public Product getProduct(Integer id) {
         return productRepository.findProductById(id);
     }

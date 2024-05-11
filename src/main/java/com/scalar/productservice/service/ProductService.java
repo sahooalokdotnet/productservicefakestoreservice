@@ -7,6 +7,7 @@ import com.scalar.productservice.model.Product;
 import java.util.List;
 
 public interface ProductService {
+    List<Product> getAllProducts(Integer pageNumber, Integer pageSize);
     Product getProduct(Integer id);
     List<Product> getProducts();
     Product addProduct(String title, String price,

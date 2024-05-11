@@ -1,14 +1,13 @@
 package com.scalar.productservice.controller;
 
-import com.scalar.productservice.dto.CategoryResponseDTO;
 import com.scalar.productservice.dto.ProductRequestDTO;
 import com.scalar.productservice.dto.ProductResponseDTO;
 import com.scalar.productservice.exception.CategoryNotFoundException;
 import com.scalar.productservice.exception.ProductNotFoundException;
-import com.scalar.productservice.model.Category;
 import com.scalar.productservice.model.Product;
 import com.scalar.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +31,12 @@ public class ProductController {
              productResponseDTOs.add(getProductResponseFromProduct(product));
         }
         return productResponseDTOs;
+    }
+    @GetMapping("pagination/{pageNo}/{pageSize}")
+    public ResponseEntity<List<Product>> pagination(@PathVariable Integer pageNo, @PathVariable Integer pageSize)
+    {
+        List<Product>  products = this.productService.getAllProducts(pageNo, pageSize);
+        return ResponseEntity.ok(products);
     }
     @GetMapping("/products/{id}")
     public ProductResponseDTO getProductById(@PathVariable Integer id) throws ProductNotFoundException {
